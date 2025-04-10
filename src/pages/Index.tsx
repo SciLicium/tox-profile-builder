@@ -5,7 +5,7 @@ import SearchBar from "../components/SearchBar";
 import SubstanceProfile from "../components/SubstanceProfile";
 import { Substance } from "../types";
 import { getToxSectionsBySubstanceId } from "../data/sampleData";
-import { Flask, FileText, Database } from "lucide-react";
+import { Beaker, FileText, Database } from "lucide-react";
 
 const Index: React.FC = () => {
   const [selectedSubstance, setSelectedSubstance] = useState<Substance | null>(
@@ -39,7 +39,7 @@ const Index: React.FC = () => {
           <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white rounded-lg shadow-sm border p-6 text-center">
               <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Flask className="h-6 w-6 text-blue-500" />
+                <Beaker className="h-6 w-6 text-blue-500" />
               </div>
               <h3 className="font-bold text-lg mb-2">Données toxicologiques complètes</h3>
               <p className="text-gray-600">

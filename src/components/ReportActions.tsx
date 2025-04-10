@@ -3,7 +3,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Substance, ToxicologicalSection } from "../types";
 import { generatePDF } from "../utils/pdfGenerator";
-import { FilePdf, Save, Share, Star } from "lucide-react";
+import { FileText, Save, Share, Star } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
 interface ReportActionsProps {
@@ -62,7 +62,7 @@ const ReportActions: React.FC<ReportActionsProps> = ({ substance, sections }) =>
         onClick={handleGeneratePDF}
         className="bg-tox-primary hover:bg-tox-secondary flex items-center gap-1"
       >
-        <FilePdf className="h-4 w-4" />
+        <FileText className="h-4 w-4" />
         <span>Générer PDF</span>
       </Button>
     </div>
