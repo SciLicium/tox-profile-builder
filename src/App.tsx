@@ -4,8 +4,24 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import { AuthProvider } from "./contexts/AuthContext";
 import Index from "./pages/Index";
+import About from "./pages/About";
 import NotFound from "./pages/NotFound";
+
+// Auth pages
+import LoginPage from "./pages/auth/LoginPage";
+import RegisterPage from "./pages/auth/RegisterPage";
+import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
+import UpdatePasswordPage from "./pages/auth/UpdatePasswordPage";
+import VerificationPage from "./pages/auth/VerificationPage";
+
+// User pages
+import ProfilePage from "./pages/profile/ProfilePage";
+
+// Admin pages
+import UsersManagementPage from "./pages/admin/UsersManagementPage";
 
 const queryClient = new QueryClient();
 
@@ -15,14 +31,28 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* Future routes would go here */}
-          {/* <Route path="/history" element={<History />} /> */}
-          {/* <Route path="/about" element={<About />} /> */}
-          {/* <Route path="/substance/:id" element={<SubstanceDetail />} /> */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/about" element={<About />} />
+            
+            {/* Auth Routes */}
+            <Route path="/auth/login" element={<LoginPage />} />
+            <Route path="/auth/register" element={<RegisterPage />} />
+            <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/auth/update-password" element={<UpdatePasswordPage />} />
+            <Route path="/auth/verification" element={<VerificationPage />} />
+            
+            {/* User Routes */}
+            <Route path="/profile" element={<ProfilePage />} />
+            
+            {/* Admin Routes */}
+            <Route path="/admin/users" element={<UsersManagementPage />} />
+            
+            {/* Catch-all route */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

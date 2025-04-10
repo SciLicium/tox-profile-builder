@@ -9,16 +9,259 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          created_at: string
+          first_name: string | null
+          id: string
+          last_name: string | null
+          role: Database["public"]["Enums"]["user_role"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          first_name?: string | null
+          id: string
+          last_name?: string | null
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      reports: {
+        Row: {
+          created_at: string
+          date: string
+          id: string
+          pdf_content: string | null
+          substance_id: string
+          user_comment: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date?: string
+          id?: string
+          pdf_content?: string | null
+          substance_id: string
+          user_comment?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          id?: string
+          pdf_content?: string | null
+          substance_id?: string
+          user_comment?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reports_substance_id_fkey"
+            columns: ["substance_id"]
+            isOneToOne: false
+            referencedRelation: "substances"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scraping_sources: {
+        Row: {
+          content_type: string
+          created_at: string
+          created_by: string | null
+          id: string
+          name: string
+          update_frequency: string
+          updated_at: string
+          updated_by: string | null
+          url: string
+        }
+        Insert: {
+          content_type: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          name: string
+          update_frequency: string
+          updated_at?: string
+          updated_by?: string | null
+          url: string
+        }
+        Update: {
+          content_type?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          name?: string
+          update_frequency?: string
+          updated_at?: string
+          updated_by?: string | null
+          url?: string
+        }
+        Relationships: []
+      }
+      search_history: {
+        Row: {
+          id: string
+          search_date: string
+          substance_id: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          search_date?: string
+          substance_id: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          search_date?: string
+          substance_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "search_history_substance_id_fkey"
+            columns: ["substance_id"]
+            isOneToOne: false
+            referencedRelation: "substances"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      substances: {
+        Row: {
+          cas_number: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          inci_name: string | null
+          name: string
+          regulatory_status: string | null
+          smiles: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          cas_number?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          inci_name?: string | null
+          name: string
+          regulatory_status?: string | null
+          smiles?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          cas_number?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          inci_name?: string | null
+          name?: string
+          regulatory_status?: string | null
+          smiles?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      toxicological_sections: {
+        Row: {
+          acquisition_date: string
+          content: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          reference_list: string[] | null
+          section_type: Database["public"]["Enums"]["tox_section_type"]
+          source_urls: string[] | null
+          status: Database["public"]["Enums"]["section_status"]
+          substance_id: string
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          acquisition_date?: string
+          content?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          reference_list?: string[] | null
+          section_type: Database["public"]["Enums"]["tox_section_type"]
+          source_urls?: string[] | null
+          status?: Database["public"]["Enums"]["section_status"]
+          substance_id: string
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          acquisition_date?: string
+          content?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          reference_list?: string[] | null
+          section_type?: Database["public"]["Enums"]["tox_section_type"]
+          source_urls?: string[] | null
+          status?: Database["public"]["Enums"]["section_status"]
+          substance_id?: string
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "toxicological_sections_substance_id_fkey"
+            columns: ["substance_id"]
+            isOneToOne: false
+            referencedRelation: "substances"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: { requested_role: Database["public"]["Enums"]["user_role"] }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      section_status: "valid" | "incomplete" | "verify" | "pending"
+      tox_section_type:
+        | "acute_toxicity"
+        | "irritation_corrosion"
+        | "repeated_dose"
+        | "mutagenicity"
+        | "carcinogenicity"
+        | "reproduction"
+        | "human_exposure"
+        | "phototoxicity"
+        | "metabolism"
+        | "other_data"
+        | "conclusion"
+      user_role: "admin" | "user" | "toxicologist" | "reviewer"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -133,6 +376,22 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      section_status: ["valid", "incomplete", "verify", "pending"],
+      tox_section_type: [
+        "acute_toxicity",
+        "irritation_corrosion",
+        "repeated_dose",
+        "mutagenicity",
+        "carcinogenicity",
+        "reproduction",
+        "human_exposure",
+        "phototoxicity",
+        "metabolism",
+        "other_data",
+        "conclusion",
+      ],
+      user_role: ["admin", "user", "toxicologist", "reviewer"],
+    },
   },
 } as const

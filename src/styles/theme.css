@@ -1,0 +1,33 @@
+
+:root {
+  --tox-primary: #38b2ac;
+  --tox-secondary: #2c9a94;
+}
+
+.bg-tox-primary {
+  background-color: var(--tox-primary);
+}
+
+.bg-tox-secondary {
+  background-color: var(--tox-secondary);
+}
+
+.text-tox-primary {
+  color: var(--tox-primary);
+}
+
+.hover\:bg-tox-primary:hover {
+  background-color: var(--tox-primary);
+}
+
+.hover\:bg-tox-secondary:hover {
+  background-color: var(--tox-secondary);
+}
+
+.hover\:text-tox-primary:hover {
+  color: var(--tox-primary);
+}
+
+.hover\:bg-tox-primary\/10:hover {
+  background-color: rgba(56, 178, 172, 0.1);
+}
