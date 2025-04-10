@@ -19,8 +19,8 @@ interface UserWithProfile {
   id: string;
   email: string;
   created_at: string;
-  first_name: string;
-  last_name: string;
+  first_name: string | null;
+  last_name: string | null;
   role: 'admin' | 'user' | 'toxicologist' | 'reviewer';
 }
 
@@ -69,14 +69,14 @@ const UsersManagementPage: React.FC = () => {
       // In a real implementation, you might want to add an admin-only edge function
       // that can fetch full user details from auth.users
       
-      const usersWithProfiles = profiles.map(profile => ({
+      const usersWithProfiles = profiles?.map(profile => ({
         id: profile.id,
         email: profile.id, // Using ID as email since we don't have direct access to auth.users
         created_at: new Date().toISOString(), // Placeholder
         first_name: profile.first_name,
         last_name: profile.last_name,
         role: profile.role
-      }));
+      })) || [];
       
       setUsers(usersWithProfiles);
     } catch (error: any) {

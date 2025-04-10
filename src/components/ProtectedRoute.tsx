@@ -25,7 +25,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
         variant: "destructive",
       });
     }
-  }, [user, profile, requiredRole, loading]);
+  }, [user, profile, requiredRole, loading, toast]);
 
   if (loading) {
     return (
