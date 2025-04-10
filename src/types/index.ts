@@ -2,11 +2,24 @@
 export interface Substance {
   id: string;
   name: string;
-  inciName: string;
-  casNumber: string;
-  smiles?: string;
-  description?: string;
-  regulatoryStatus?: string;
+  inciName: string | null;
+  casNumber: string | null;
+  smiles?: string | null;
+  description?: string | null;
+  regulatoryStatus?: string | null;
+  status: 'published' | 'draft';
+}
+
+export interface SectionDraft {
+  id: string;
+  substanceId: string;
+  sectionType: ToxSectionType;
+  title: string;
+  content?: string;
+  referenceList?: string[];
+  sourceUrls?: string[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ToxicologicalSection {
@@ -65,3 +78,18 @@ export interface Report {
   pdfContent?: string; // Or maybe a URL to the PDF
   userComment?: string;
 }
+
+// Map enum string values to human-readable French labels
+export const toxSectionTypeLabels = {
+  [ToxSectionType.ACUTE_TOXICITY]: 'Toxicité aiguë',
+  [ToxSectionType.IRRITATION_CORROSION]: 'Irritation et corrosion',
+  [ToxSectionType.REPEATED_DOSE]: 'Toxicité à doses répétées',
+  [ToxSectionType.MUTAGENICITY]: 'Mutagénicité',
+  [ToxSectionType.CARCINOGENICITY]: 'Cancérogénicité',
+  [ToxSectionType.REPRODUCTION]: 'Toxicité pour la reproduction',
+  [ToxSectionType.HUMAN_EXPOSURE]: 'Exposition humaine',
+  [ToxSectionType.PHOTOTOXICITY]: 'Phototoxicité',
+  [ToxSectionType.METABOLISM]: 'Métabolisme',
+  [ToxSectionType.OTHER_DATA]: 'Autres données',
+  [ToxSectionType.CONCLUSION]: 'Conclusion'
+};

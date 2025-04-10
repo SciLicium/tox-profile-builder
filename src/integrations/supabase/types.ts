@@ -139,6 +139,53 @@ export type Database = {
           },
         ]
       }
+      substance_section_drafts: {
+        Row: {
+          content: string | null
+          created_at: string | null
+          created_by: string | null
+          id: string
+          reference_list: string[] | null
+          section_type: Database["public"]["Enums"]["tox_section_type"]
+          source_urls: string[] | null
+          substance_id: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          reference_list?: string[] | null
+          section_type: Database["public"]["Enums"]["tox_section_type"]
+          source_urls?: string[] | null
+          substance_id: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          content?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          reference_list?: string[] | null
+          section_type?: Database["public"]["Enums"]["tox_section_type"]
+          source_urls?: string[] | null
+          substance_id?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "substance_section_drafts_substance_id_fkey"
+            columns: ["substance_id"]
+            isOneToOne: false
+            referencedRelation: "substances"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       substances: {
         Row: {
           cas_number: string | null
@@ -150,6 +197,7 @@ export type Database = {
           name: string
           regulatory_status: string | null
           smiles: string | null
+          status: string | null
           updated_at: string
           updated_by: string | null
         }
@@ -163,6 +211,7 @@ export type Database = {
           name: string
           regulatory_status?: string | null
           smiles?: string | null
+          status?: string | null
           updated_at?: string
           updated_by?: string | null
         }
@@ -176,6 +225,7 @@ export type Database = {
           name?: string
           regulatory_status?: string | null
           smiles?: string | null
+          status?: string | null
           updated_at?: string
           updated_by?: string | null
         }
