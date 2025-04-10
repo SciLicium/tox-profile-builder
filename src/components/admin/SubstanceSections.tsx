@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -35,7 +34,7 @@ const sectionDraftSchema = z.object({
   title: z.string().min(1, "Le titre est obligatoire"),
   content: z.string().optional(),
   sectionType: z.string(),
-  // Fix: Transform input string to string arrays
+  // Fix: Use arrays directly rather than transforming strings
   sourceUrls: z.string().optional().transform(str => 
     str ? str.split('\n').filter(Boolean) : []
   ),
@@ -216,13 +215,22 @@ const SubstanceSections: React.FC = () => {
   // Handler to edit a section
   const handleEditSection = (section: SectionDraft) => {
     setEditingSectionId(section.id);
+    
+    // Fix: Create string values from arrays for the form
+    const sourceUrlsString = Array.isArray(section.sourceUrls) 
+      ? section.sourceUrls.join('\n') 
+      : '';
+      
+    const referenceListString = Array.isArray(section.referenceList) 
+      ? section.referenceList.join('\n') 
+      : '';
+    
     form.reset({
       title: section.title,
       content: section.content || '',
       sectionType: section.sectionType,
-      // Fix: Convert array to newline-separated string for form
-      sourceUrls: Array.isArray(section.sourceUrls) ? section.sourceUrls.join('\n') : '',
-      referenceList: Array.isArray(section.referenceList) ? section.referenceList.join('\n') : '',
+      sourceUrls: sourceUrlsString,
+      referenceList: referenceListString,
     });
     setIsDialogOpen(true);
   };
