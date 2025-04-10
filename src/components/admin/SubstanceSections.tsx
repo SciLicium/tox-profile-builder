@@ -35,6 +35,7 @@ const sectionDraftSchema = z.object({
   title: z.string().min(1, "Le titre est obligatoire"),
   content: z.string().optional(),
   sectionType: z.string(),
+  // Fix: Transform input string to string arrays
   sourceUrls: z.string().optional().transform(str => 
     str ? str.split('\n').filter(Boolean) : []
   ),
@@ -127,9 +128,10 @@ const SubstanceSections: React.FC = () => {
     mutationFn: async (values: SectionDraftFormValues) => {
       if (!id) throw new Error("ID de substance manquant");
       
+      // Fix: Cast the sectionType to the proper enum type for database compatibility
       const draftData = {
         substance_id: id,
-        section_type: values.sectionType,
+        section_type: values.sectionType as ToxSectionType,
         title: values.title,
         content: values.content || null,
         source_urls: values.sourceUrls,
@@ -218,8 +220,9 @@ const SubstanceSections: React.FC = () => {
       title: section.title,
       content: section.content || '',
       sectionType: section.sectionType,
-      sourceUrls: section.sourceUrls?.join('\n') || '',
-      referenceList: section.referenceList?.join('\n') || '',
+      // Fix: Convert array to newline-separated string for form
+      sourceUrls: Array.isArray(section.sourceUrls) ? section.sourceUrls.join('\n') : '',
+      referenceList: Array.isArray(section.referenceList) ? section.referenceList.join('\n') : '',
     });
     setIsDialogOpen(true);
   };

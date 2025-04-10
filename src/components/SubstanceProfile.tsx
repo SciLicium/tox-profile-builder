@@ -18,8 +18,9 @@ const SubstanceProfile: React.FC<SubstanceProfileProps> = ({
   sections,
   onBack,
 }) => {
+  // Fix: Use string comparison instead of arithmetic operation
   const sortedSections = [...sections].sort(
-    (a, b) => a.sectionType - b.sectionType
+    (a, b) => a.sectionType.localeCompare(b.sectionType)
   );
 
   // Helper function to get status counts
