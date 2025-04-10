@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -33,12 +32,14 @@ const SectionDraftForm: React.FC<SectionDraftFormProps> = ({
   isSubmitting,
   isEdit
 }) => {
+  // Fix the defaultValues to match the expected types from the schema
   const form = useForm<SectionDraftFormValues>({
     resolver: zodResolver(sectionDraftSchema),
     defaultValues: initialData ? {
       title: initialData.title,
       content: initialData.content || '',
       sectionType: initialData.sectionType as ToxSectionType,
+      // Convert array to string for form display, the schema will handle conversion back
       sourceUrls: Array.isArray(initialData.sourceUrls) 
         ? initialData.sourceUrls.join('\n') 
         : '',
@@ -49,6 +50,7 @@ const SectionDraftForm: React.FC<SectionDraftFormProps> = ({
       title: '',
       content: '',
       sectionType: ToxSectionType.ACUTE_TOXICITY,
+      // Use empty strings that will be transformed by the schema
       sourceUrls: '',
       referenceList: '',
     },

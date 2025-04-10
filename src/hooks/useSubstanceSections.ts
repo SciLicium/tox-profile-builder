@@ -75,14 +75,14 @@ export const useSubstanceSections = (id?: string) => {
     mutationFn: async (values: SectionDraftFormValues) => {
       if (!id) throw new Error("ID de substance manquant");
       
-      // Cast the sectionType to the proper enum type for database compatibility
+      // The schema transformation already ensures these are string arrays
       const draftData = {
         substance_id: id,
         section_type: values.sectionType as ToxSectionType,
         title: values.title,
         content: values.content || null,
-        source_urls: values.sourceUrls as string[],
-        reference_list: values.referenceList as string[],
+        source_urls: values.sourceUrls,  // Already an array from schema transform
+        reference_list: values.referenceList,  // Already an array from schema transform
         updated_at: new Date().toISOString(),
       };
       
