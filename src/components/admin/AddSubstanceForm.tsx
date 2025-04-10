@@ -10,7 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { Flask } from 'lucide-react';
+import { Beaker } from 'lucide-react';
 
 const substanceSchema = z.object({
   name: z.string().min(1, "Le nom est obligatoire"),
@@ -79,7 +79,7 @@ const AddSubstanceForm: React.FC = () => {
   return (
     <div className="bg-white p-6 rounded-lg shadow">
       <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-        <Flask className="h-5 w-5 text-tox-primary" />
+        <Beaker className="h-5 w-5 text-tox-primary" />
         Ajouter une nouvelle substance
       </h2>
       

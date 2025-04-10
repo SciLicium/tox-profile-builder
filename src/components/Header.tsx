@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { UserCircle, LogOut, Settings, Users, Flask } from 'lucide-react';
+import { UserCircle, LogOut, Settings, Users, Beaker } from 'lucide-react';
 
 const Header: React.FC = () => {
   const { user, profile, signOut } = useAuth();
@@ -57,7 +57,7 @@ const Header: React.FC = () => {
                         <span>Gestion des utilisateurs</span>
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => navigate('/admin/substances')}>
-                        <Flask className="mr-2 h-4 w-4" />
+                        <Beaker className="mr-2 h-4 w-4" />
                         <span>Gestion des substances</span>
                       </DropdownMenuItem>
                     </>
