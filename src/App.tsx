@@ -23,6 +23,7 @@ import ProfilePage from "./pages/profile/ProfilePage";
 
 // Admin pages
 import UsersManagementPage from "./pages/admin/UsersManagementPage";
+import SubstancesManagementPage from "./pages/admin/SubstancesManagementPage";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +50,7 @@ const App = () => (
             
             {/* Admin Routes */}
             <Route path="/admin/users" element={<UsersManagementPage />} />
+            <Route path="/admin/substances" element={<SubstancesManagementPage />} />
             
             {/* Catch-all route */}
             <Route path="*" element={<NotFound />} />

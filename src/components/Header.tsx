@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { UserCircle, LogOut, Settings, Users } from 'lucide-react';
+import { UserCircle, LogOut, Settings, Users, Flask } from 'lucide-react';
 
 const Header: React.FC = () => {
   const { user, profile, signOut } = useAuth();
@@ -51,10 +51,16 @@ const Header: React.FC = () => {
                     <span>Profil</span>
                   </DropdownMenuItem>
                   {(profile?.role === 'admin') && (
-                    <DropdownMenuItem onClick={() => navigate('/admin/users')}>
-                      <Users className="mr-2 h-4 w-4" />
-                      <span>Gestion des utilisateurs</span>
-                    </DropdownMenuItem>
+                    <>
+                      <DropdownMenuItem onClick={() => navigate('/admin/users')}>
+                        <Users className="mr-2 h-4 w-4" />
+                        <span>Gestion des utilisateurs</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate('/admin/substances')}>
+                        <Flask className="mr-2 h-4 w-4" />
+                        <span>Gestion des substances</span>
+                      </DropdownMenuItem>
+                    </>
                   )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={signOut}>
@@ -90,9 +96,14 @@ const Header: React.FC = () => {
                     Profil
                   </DropdownMenuItem>
                   {(profile?.role === 'admin') && (
-                    <DropdownMenuItem onClick={() => navigate('/admin/users')}>
-                      Gestion des utilisateurs
-                    </DropdownMenuItem>
+                    <>
+                      <DropdownMenuItem onClick={() => navigate('/admin/users')}>
+                        Gestion des utilisateurs
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate('/admin/substances')}>
+                        Gestion des substances
+                      </DropdownMenuItem>
+                    </>
                   )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={signOut}>
