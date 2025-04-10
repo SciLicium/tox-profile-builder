@@ -38,7 +38,7 @@ const SectionDraftForm: React.FC<SectionDraftFormProps> = ({
     defaultValues: initialData ? {
       title: initialData.title,
       content: initialData.content || '',
-      sectionType: initialData.sectionType,
+      sectionType: initialData.sectionType as ToxSectionType,
       sourceUrls: Array.isArray(initialData.sourceUrls) 
         ? initialData.sourceUrls.join('\n') 
         : '',

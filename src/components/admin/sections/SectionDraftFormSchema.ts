@@ -6,7 +6,7 @@ import { ToxSectionType } from "@/types";
 export const sectionDraftSchema = z.object({
   title: z.string().min(1, "Le titre est obligatoire"),
   content: z.string().optional(),
-  sectionType: z.string(),
+  sectionType: z.nativeEnum(ToxSectionType),
   // Convert string input to string arrays for database storage
   sourceUrls: z.string().optional().transform(str => 
     str ? str.split('\n').filter(Boolean) : []
