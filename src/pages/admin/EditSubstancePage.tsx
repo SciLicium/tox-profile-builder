@@ -26,7 +26,18 @@ const EditSubstancePage: React.FC = () => {
         .single();
       
       if (error) throw error;
-      return data as Substance;
+      
+      // Map DB fields to interface fields
+      return {
+        id: data.id,
+        name: data.name,
+        inciName: data.inci_name,
+        casNumber: data.cas_number,
+        smiles: data.smiles,
+        description: data.description,
+        regulatoryStatus: data.regulatory_status,
+        status: data.status || 'published'
+      } as Substance;
     },
     enabled: !!id
   });

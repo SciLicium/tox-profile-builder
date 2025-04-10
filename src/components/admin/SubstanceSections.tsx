@@ -7,21 +7,10 @@ import { Substance, SectionDraft, ToxSectionType, toxSectionTypeLabels } from '@
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { 
-  Dialog, 
-  DialogContent, 
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger 
+  Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle
 } from '@/components/ui/dialog';
 import { 
-  Form, 
-  FormControl, 
-  FormField, 
-  FormItem, 
-  FormLabel, 
-  FormMessage 
+  Form, FormControl, FormField, FormItem, FormLabel, FormMessage 
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -29,40 +18,23 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardFooter, 
-  CardHeader, 
-  CardTitle 
+  Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle 
 } from "@/components/ui/card";
 import { 
-  ArrowLeft,  
-  FileText, 
-  FilePlus, 
-  Trash2, 
-  Edit, 
-  Save, 
-  FileEdit 
+  ArrowLeft, FileText, FilePlus, Trash2, Edit, Save, FileEdit 
 } from 'lucide-react';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
+  Collapsible, CollapsibleContent, CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 
 // Form schema for section drafts
 const sectionDraftSchema = z.object({
   title: z.string().min(1, "Le titre est obligatoire"),
   content: z.string().optional(),
-  sectionType: z.string().transform(Number),
+  sectionType: z.string(),
   sourceUrls: z.string().optional().transform(str => 
     str ? str.split('\n').filter(Boolean) : []
   ),
@@ -86,7 +58,7 @@ const SubstanceSections: React.FC = () => {
     defaultValues: {
       title: '',
       content: '',
-      sectionType: ToxSectionType.ACUTE_TOXICITY.toString(),
+      sectionType: ToxSectionType.ACUTE_TOXICITY,
       sourceUrls: '',
       referenceList: '',
     },
@@ -105,7 +77,18 @@ const SubstanceSections: React.FC = () => {
         .single();
       
       if (error) throw error;
-      return data as Substance;
+      
+      // Map from DB schema to our interface
+      return {
+        id: data.id,
+        name: data.name,
+        inciName: data.inci_name,
+        casNumber: data.cas_number,
+        smiles: data.smiles,
+        description: data.description,
+        regulatoryStatus: data.regulatory_status,
+        status: data.status || 'published'
+      } as Substance;
     },
     enabled: !!id,
   });
@@ -234,7 +217,7 @@ const SubstanceSections: React.FC = () => {
     form.reset({
       title: section.title,
       content: section.content || '',
-      sectionType: section.sectionType.toString(),
+      sectionType: section.sectionType,
       sourceUrls: section.sourceUrls?.join('\n') || '',
       referenceList: section.referenceList?.join('\n') || '',
     });
@@ -247,7 +230,7 @@ const SubstanceSections: React.FC = () => {
     form.reset({
       title: '',
       content: '',
-      sectionType: ToxSectionType.ACUTE_TOXICITY.toString(),
+      sectionType: ToxSectionType.ACUTE_TOXICITY,
       sourceUrls: '',
       referenceList: '',
     });
@@ -311,7 +294,7 @@ const SubstanceSections: React.FC = () => {
                   {section.title}
                 </CardTitle>
                 <CardDescription>
-                  {toxSectionTypeLabels[section.sectionType]}
+                  {toxSectionTypeLabels[section.sectionType] || section.sectionType}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -414,7 +397,7 @@ const SubstanceSections: React.FC = () => {
                     <FormLabel>Type de section</FormLabel>
                     <Select
                       onValueChange={field.onChange}
-                      defaultValue={field.value.toString()}
+                      defaultValue={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
@@ -422,9 +405,9 @@ const SubstanceSections: React.FC = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {Object.entries(toxSectionTypeLabels).map(([value, label]) => (
-                          <SelectItem key={value} value={value.toString()}>
-                            {label}
+                        {Object.entries(ToxSectionType).map(([key, value]) => (
+                          <SelectItem key={key} value={value}>
+                            {toxSectionTypeLabels[value] || key}
                           </SelectItem>
                         ))}
                       </SelectContent>

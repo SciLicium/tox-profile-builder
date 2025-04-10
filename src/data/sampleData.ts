@@ -10,6 +10,7 @@ export const sampleSubstances: Substance[] = [
     smiles: "CCCCCCCCCCCCOS(=O)(=O)O[Na]",
     description: "Anionic surfactant used in many cleaning and hygiene products.",
     regulatoryStatus: "Approved for use in cosmetics with restrictions",
+    status: "published"
   },
   {
     id: "2",
@@ -19,6 +20,7 @@ export const sampleSubstances: Substance[] = [
     smiles: "CC1=C(C(CCC1)(C)C)C=CC(=CC=CC(=C)C=O)C",
     description: "Vitamin A form used in anti-aging products.",
     regulatoryStatus: "Approved for use in cosmetics with restrictions",
+    status: "published"
   },
   {
     id: "3",
@@ -28,6 +30,7 @@ export const sampleSubstances: Substance[] = [
     smiles: "OCCOc1ccccc1",
     description: "Preservative used in cosmetics and personal care products.",
     regulatoryStatus: "Approved for use in cosmetics (max 1%)",
+    status: "published"
   }
 ];
 

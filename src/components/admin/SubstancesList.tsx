@@ -24,7 +24,17 @@ const SubstancesList: React.FC = () => {
         .order('name');
       
       if (error) throw error;
-      return data as Substance[];
+      
+      return data.map(item => ({
+        id: item.id,
+        name: item.name,
+        inciName: item.inci_name,
+        casNumber: item.cas_number,
+        smiles: item.smiles,
+        description: item.description,
+        regulatoryStatus: item.regulatory_status,
+        status: item.status || 'published'
+      })) as Substance[];
     }
   });
 

@@ -13,7 +13,7 @@ export interface Substance {
 export interface SectionDraft {
   id: string;
   substanceId: string;
-  sectionType: ToxSectionType;
+  sectionType: string; // Changed to string to match database enum type
   title: string;
   content?: string;
   referenceList?: string[];
@@ -25,7 +25,7 @@ export interface SectionDraft {
 export interface ToxicologicalSection {
   id: string;
   substanceId: string;
-  sectionType: ToxSectionType;
+  sectionType: string; // Changed to string to match database enum type
   title: string;
   content: string;
   references: string[];
@@ -34,18 +34,19 @@ export interface ToxicologicalSection {
   status: 'valid' | 'incomplete' | 'verify' | 'pending';
 }
 
+// Changed to string enum to match database enum values
 export enum ToxSectionType {
-  ACUTE_TOXICITY = 1,
-  IRRITATION_CORROSION = 2,
-  REPEATED_DOSE = 3,
-  MUTAGENICITY = 4,
-  CARCINOGENICITY = 5,
-  REPRODUCTION = 6,
-  HUMAN_EXPOSURE = 7,
-  PHOTOTOXICITY = 8,
-  METABOLISM = 9,
-  OTHER_DATA = 10,
-  CONCLUSION = 11
+  ACUTE_TOXICITY = "acute_toxicity",
+  IRRITATION_CORROSION = "irritation_corrosion",
+  REPEATED_DOSE = "repeated_dose",
+  MUTAGENICITY = "mutagenicity",
+  CARCINOGENICITY = "carcinogenicity",
+  REPRODUCTION = "reproduction",
+  HUMAN_EXPOSURE = "human_exposure",
+  PHOTOTOXICITY = "phototoxicity",
+  METABOLISM = "metabolism",
+  OTHER_DATA = "other_data",
+  CONCLUSION = "conclusion"
 }
 
 export interface ScrapingSource {
@@ -80,7 +81,7 @@ export interface Report {
 }
 
 // Map enum string values to human-readable French labels
-export const toxSectionTypeLabels = {
+export const toxSectionTypeLabels: Record<string, string> = {
   [ToxSectionType.ACUTE_TOXICITY]: 'Toxicité aiguë',
   [ToxSectionType.IRRITATION_CORROSION]: 'Irritation et corrosion',
   [ToxSectionType.REPEATED_DOSE]: 'Toxicité à doses répétées',
