@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import Layout from '@/components/Layout';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import { Skeleton } from "@/components/ui/skeleton";
 
 const profileSchema = z.object({
   firstName: z.string().min(1, "Le prénom est requis"),
@@ -20,7 +21,7 @@ const profileSchema = z.object({
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
 const ProfilePage: React.FC = () => {
-  const { profile, updateProfile } = useAuth();
+  const { user, profile, loading, updateProfile } = useAuth();
   
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -28,7 +29,22 @@ const ProfilePage: React.FC = () => {
       firstName: profile?.first_name || "",
       lastName: profile?.last_name || "",
     },
+    // Re-initialize form when profile data loads
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+    },
   });
+
+  // Update form values when profile data changes
+  React.useEffect(() => {
+    if (profile) {
+      form.reset({
+        firstName: profile.first_name || "",
+        lastName: profile.last_name || "",
+      });
+    }
+  }, [profile, form]);
 
   const onSubmit = async (data: ProfileFormValues) => {
     await updateProfile({
@@ -64,16 +80,31 @@ const ProfilePage: React.FC = () => {
                   <CardDescription>Vos informations de base</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-500">Email</span>
-                    <span className="font-medium">{profile?.id}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-500">Rôle</span>
-                    <Badge className={getRoleBadgeColor(profile?.role || 'user')}>
-                      {profile?.role}
-                    </Badge>
-                  </div>
+                  {loading ? (
+                    <>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-gray-500">Email</span>
+                        <Skeleton className="h-4 w-[120px]" />
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-gray-500">Rôle</span>
+                        <Skeleton className="h-6 w-[80px]" />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-gray-500">Email</span>
+                        <span className="font-medium">{user?.email}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-gray-500">Rôle</span>
+                        <Badge className={getRoleBadgeColor(profile?.role || 'user')}>
+                          {profile?.role || 'user'}
+                        </Badge>
+                      </div>
+                    </>
+                  )}
                 </CardContent>
               </Card>
             </div>
@@ -85,43 +116,65 @@ const ProfilePage: React.FC = () => {
                   <CardDescription>Mettre à jour vos informations personnelles</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                  {loading ? (
+                    <div className="space-y-4">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <FormField
-                          control={form.control}
-                          name="firstName"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Prénom</FormLabel>
-                              <FormControl>
-                                <Input placeholder="Prénom" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={form.control}
-                          name="lastName"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Nom</FormLabel>
-                              <FormControl>
-                                <Input placeholder="Nom" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
+                        <div>
+                          <p className="text-sm mb-2">Prénom</p>
+                          <Skeleton className="h-9 w-full" />
+                        </div>
+                        <div>
+                          <p className="text-sm mb-2">Nom</p>
+                          <Skeleton className="h-9 w-full" />
+                        </div>
                       </div>
                       <div className="flex justify-end">
-                        <Button type="submit" className="bg-tox-primary hover:bg-tox-secondary">
-                          Enregistrer les modifications
-                        </Button>
+                        <Skeleton className="h-9 w-[200px]" />
                       </div>
-                    </form>
-                  </Form>
+                    </div>
+                  ) : (
+                    <Form {...form}>
+                      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <FormField
+                            control={form.control}
+                            name="firstName"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Prénom</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="Prénom" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name="lastName"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Nom</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="Nom" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        <div className="flex justify-end">
+                          <Button 
+                            type="submit" 
+                            className="bg-tox-primary hover:bg-tox-secondary"
+                            disabled={form.formState.isSubmitting}
+                          >
+                            {form.formState.isSubmitting ? "Enregistrement..." : "Enregistrer les modifications"}
+                          </Button>
+                        </div>
+                      </form>
+                    </Form>
+                  )}
                 </CardContent>
               </Card>
             </div>

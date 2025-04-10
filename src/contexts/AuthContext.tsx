@@ -72,14 +72,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const fetchProfile = async (userId: string) => {
     try {
+      console.log("Fetching profile for user:", userId);
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', userId)
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching user profile:', error);
+        throw error;
+      }
       
+      console.log("Profile data received:", data);
       setProfile(data as UserProfile);
     } catch (error) {
       console.error('Error fetching user profile:', error);
@@ -188,14 +193,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (!user) return;
     
     try {
+      console.log("Updating profile with data:", data);
       const { error } = await supabase
         .from('profiles')
         .update(data)
         .eq('id', user.id);
       
-      if (error) throw error;
+      if (error) {
+        console.error('Update profile error:', error);
+        throw error;
+      }
       
-      setProfile(prev => prev ? { ...prev, ...data } : null);
+      // Refetch profile to ensure we have latest data
+      await fetchProfile(user.id);
       
       toast({
         title: "Profil mis à jour",
