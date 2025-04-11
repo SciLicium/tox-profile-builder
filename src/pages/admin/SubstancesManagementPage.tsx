@@ -15,7 +15,7 @@ const SubstancesManagementPage: React.FC = () => {
   const { toast } = useToast();
   
   const toggleForm = () => {
-    if (!user) {
+    if (!user || !profile) {
       toast({
         title: "Authentification requise",
         description: "Vous devez être connecté pour gérer les substances.",
