@@ -15,19 +15,25 @@ const AddSubstanceForm: React.FC = () => {
   
   const addSubstanceMutation = useMutation({
     mutationFn: async (data: SubstanceFormValues) => {
+      if (!user?.id) {
+        throw new Error('User not authenticated');
+      }
+      
+      console.log("Creating substance with user ID:", user.id);
+      
       // First, insert the substance
       const { error, data: newSubstance } = await supabase
         .from('substances')
         .insert([{
           name: data.name,
-          inci_name: data.inciName,
-          cas_number: data.casNumber,
-          smiles: data.smiles,
-          description: data.description,
-          regulatory_status: data.regulatoryStatus,
+          inci_name: data.inciName || null,
+          cas_number: data.casNumber || null,
+          smiles: data.smiles || null,
+          description: data.description || null,
+          regulatory_status: data.regulatoryStatus || null,
           status: data.isDraft ? 'draft' : 'published',
-          created_by: user?.id, // Add the user ID who created the substance
-          updated_by: user?.id, // Add the user ID who last updated the substance
+          created_by: user.id,
+          updated_by: user.id,
           updated_at: new Date().toISOString(),
         }])
         .select()
@@ -47,7 +53,7 @@ const AddSubstanceForm: React.FC = () => {
           content: '',
           source_urls: [], 
           reference_list: [],
-          created_by: user?.id, // Add the user ID who created the section
+          created_by: user.id,
           updated_at: new Date().toISOString(),
           created_at: new Date().toISOString(),
         }));

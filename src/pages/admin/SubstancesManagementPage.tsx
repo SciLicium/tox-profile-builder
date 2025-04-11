@@ -1,17 +1,31 @@
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { useToast } from '@/components/ui/use-toast';
-import { supabase } from '@/integrations/supabase/client';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AddSubstanceForm from '@/components/admin/AddSubstanceForm';
 import SubstancesList from '@/components/admin/SubstancesList';
 import { Button } from '@/components/ui/button';
 import { Beaker, Plus } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 const SubstancesManagementPage: React.FC = () => {
   const [showAddForm, setShowAddForm] = useState(false);
+  const { user, profile } = useAuth();
+  const { toast } = useToast();
+  
+  const toggleForm = () => {
+    if (!user) {
+      toast({
+        title: "Authentification requise",
+        description: "Vous devez être connecté pour gérer les substances.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setShowAddForm(!showAddForm);
+  };
   
   return (
     <ProtectedRoute requiredRole="admin">
@@ -24,7 +38,7 @@ const SubstancesManagementPage: React.FC = () => {
             </h1>
             
             <Button 
-              onClick={() => setShowAddForm(!showAddForm)}
+              onClick={toggleForm}
               variant={showAddForm ? "outline" : "default"}
             >
               {showAddForm ? (

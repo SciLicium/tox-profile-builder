@@ -21,6 +21,10 @@ const EditSubstanceForm: React.FC<EditSubstanceFormProps> = ({ substance, onSucc
   
   const updateSubstanceMutation = useMutation({
     mutationFn: async (data: SubstanceFormValues) => {
+      if (!user?.id) {
+        throw new Error('User not authenticated');
+      }
+      
       const subData = {
         name: data.name,
         inci_name: data.inciName || null,
@@ -29,11 +33,12 @@ const EditSubstanceForm: React.FC<EditSubstanceFormProps> = ({ substance, onSucc
         description: data.description || null,
         regulatory_status: data.regulatoryStatus || null,
         status: data.isDraft ? 'draft' : 'published',
-        updated_by: user?.id,
+        updated_by: user.id,
         updated_at: new Date().toISOString(),
       };
       
       if (isEditMode && substance) {
+        console.log("Updating substance with ID:", substance.id);
         const { data: updatedSubstance, error } = await supabase
           .from('substances')
           .update(subData)
@@ -47,11 +52,12 @@ const EditSubstanceForm: React.FC<EditSubstanceFormProps> = ({ substance, onSucc
         }
         return updatedSubstance;
       } else {
+        console.log("Creating new substance with user ID:", user.id);
         const { data: newSubstance, error } = await supabase
           .from('substances')
           .insert([{
             ...subData,
-            created_by: user?.id
+            created_by: user.id
           }])
           .select()
           .single();
