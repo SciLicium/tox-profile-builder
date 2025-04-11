@@ -2,18 +2,23 @@
 import { z } from "zod";
 import { ToxSectionType } from "@/types";
 
-// Define the schema for toxicological section form
+// Helper function to handle string to array conversion
+const stringToArray = (value: string) => 
+  value ? value.split('\n').filter(item => item.trim() !== '') : [];
+
+// Define schema
 export const toxSectionSchema = z.object({
-  title: z.string().min(1, "Le titre est obligatoire"),
-  content: z.string().min(1, "Le contenu est obligatoire"),
   sectionType: z.nativeEnum(ToxSectionType),
+  title: z.string().min(1, "Le titre est obligatoire"),
+  content: z.string().optional(),
   sourceUrls: z.string()
-    .transform(str => str ? str.split('\n').filter(s => s.trim() !== '') : []),
+    .transform(stringToArray)
+    .or(z.array(z.string())),
   referenceList: z.string()
-    .transform(str => str ? str.split('\n').filter(s => s.trim() !== '') : []),
-  status: z.enum(['valid', 'incomplete', 'verify', 'pending'])
-    .default('pending'),
+    .transform(stringToArray)
+    .or(z.array(z.string())),
+  status: z.enum(['valid', 'incomplete', 'verify', 'pending']),
 });
 
-// Create a type from the schema
+// Create type from schema
 export type ToxSectionFormValues = z.infer<typeof toxSectionSchema>;

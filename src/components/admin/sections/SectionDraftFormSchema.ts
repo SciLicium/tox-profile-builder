@@ -2,16 +2,22 @@
 import { z } from "zod";
 import { ToxSectionType } from "@/types";
 
-// Define the schema for section draft form
+// Helper function to handle string to array conversion
+const stringToArray = (value: string) => 
+  value ? value.split('\n').filter(item => item.trim() !== '') : [];
+
+// Define schema
 export const sectionDraftSchema = z.object({
+  sectionType: z.nativeEnum(ToxSectionType),
   title: z.string().min(1, "Le titre est obligatoire"),
   content: z.string().optional(),
-  sectionType: z.nativeEnum(ToxSectionType),
   sourceUrls: z.string()
-    .transform(str => str ? str.split('\n').filter(s => s.trim() !== '') : []),
+    .transform(stringToArray)
+    .or(z.array(z.string())),
   referenceList: z.string()
-    .transform(str => str ? str.split('\n').filter(s => s.trim() !== '') : []),
+    .transform(stringToArray)
+    .or(z.array(z.string())),
 });
 
-// Create a type from the schema
+// Create type from schema
 export type SectionDraftFormValues = z.infer<typeof sectionDraftSchema>;
