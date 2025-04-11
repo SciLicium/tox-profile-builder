@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -36,9 +35,13 @@ const SectionDraftForm: React.FC<SectionDraftFormProps> = ({
     },
   });
 
+  const handleSubmit = form.handleSubmit((data) => {
+    onSubmit(sectionDraftSchema.parse(data) as SectionDraftFormValues);
+  });
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-6">
         <FormField
           control={form.control}
           name="sectionType"

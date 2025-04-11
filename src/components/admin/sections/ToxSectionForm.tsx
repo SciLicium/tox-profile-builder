@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -37,10 +36,13 @@ const ToxSectionForm: React.FC<ToxSectionFormProps> = ({
     },
   });
 
+  const handleSubmit = form.handleSubmit((data) => {
+    onSubmit(toxSectionSchema.parse(data) as ToxSectionFormValues);
+  });
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {/* Form fields */}
+      <form onSubmit={handleSubmit} className="space-y-6">
         <FormField
           control={form.control}
           name="sectionType"
