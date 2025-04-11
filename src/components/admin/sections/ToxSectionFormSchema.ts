@@ -20,3 +20,13 @@ export const toxSectionSchema = z.object({
 
 // Create type from schema
 export type ToxSectionFormValues = z.infer<typeof toxSectionSchema>;
+
+// Define an interface that represents the actual form input values before transformation
+export interface ToxSectionFormInputs {
+  sectionType: ToxSectionType;
+  title: string;
+  content?: string;
+  sourceUrls: string;
+  referenceList: string;
+  status: 'valid' | 'incomplete' | 'verify' | 'pending';
+}

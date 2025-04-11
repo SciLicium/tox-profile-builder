@@ -19,3 +19,12 @@ export const sectionDraftSchema = z.object({
 
 // Create type from schema
 export type SectionDraftFormValues = z.infer<typeof sectionDraftSchema>;
+
+// Define an interface that represents the actual form input values before transformation
+export interface SectionDraftFormInputs {
+  sectionType: ToxSectionType;
+  title: string;
+  content?: string;
+  sourceUrls: string;
+  referenceList: string;
+}

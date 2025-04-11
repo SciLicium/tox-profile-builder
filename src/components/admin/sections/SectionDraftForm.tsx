@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ToxSectionType, toxSectionTypeLabels, SectionDraft } from "@/types";
-import { sectionDraftSchema, SectionDraftFormValues } from "./SectionDraftFormSchema";
+import { sectionDraftSchema, SectionDraftFormValues, SectionDraftFormInputs } from "./SectionDraftFormSchema";
 
 interface SectionDraftFormProps {
   initialData?: SectionDraft;
@@ -25,7 +25,7 @@ const SectionDraftForm: React.FC<SectionDraftFormProps> = ({
   isEdit = false,
   onCancel
 }) => {
-  const form = useForm<SectionDraftFormValues>({
+  const form = useForm<SectionDraftFormInputs>({
     resolver: zodResolver(sectionDraftSchema),
     defaultValues: {
       sectionType: initialData?.sectionType as ToxSectionType || ToxSectionType.ACUTE_TOXICITY,

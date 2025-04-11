@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Card, CardContent } from "@/components/ui/card";
 import { ToxSectionType, toxSectionTypeLabels, ToxicologicalSection } from "@/types";
-import { toxSectionSchema, ToxSectionFormValues } from "./ToxSectionFormSchema";
+import { toxSectionSchema, ToxSectionFormValues, ToxSectionFormInputs } from "./ToxSectionFormSchema";
 
 interface ToxSectionFormProps {
   initialData?: ToxicologicalSection;
@@ -25,7 +25,7 @@ const ToxSectionForm: React.FC<ToxSectionFormProps> = ({
   isSubmitting,
   isEdit = false
 }) => {
-  const form = useForm<ToxSectionFormValues>({
+  const form = useForm<ToxSectionFormInputs>({
     resolver: zodResolver(toxSectionSchema),
     defaultValues: {
       sectionType: initialData?.sectionType as ToxSectionType || ToxSectionType.ACUTE_TOXICITY,
