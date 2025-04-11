@@ -27,6 +27,7 @@ import SubstancesManagementPage from "./pages/admin/SubstancesManagementPage";
 import EditSubstancePage from "./pages/admin/EditSubstancePage";
 import SubstanceSectionsPage from "./pages/admin/SubstanceSectionsPage";
 import ViewSubstancePage from "./pages/admin/ViewSubstancePage";
+import ToxSectionsPage from "./pages/admin/ToxSectionsPage";
 
 const queryClient = new QueryClient();
 
@@ -57,6 +58,7 @@ const App = () => (
             <Route path="/admin/substances/edit/:id" element={<EditSubstancePage />} />
             <Route path="/admin/substances/sections/:id" element={<SubstanceSectionsPage />} />
             <Route path="/admin/substances/view/:id" element={<ViewSubstancePage />} />
+            <Route path="/admin/substances/toxsections/:id" element={<ToxSectionsPage />} />
             
             {/* Catch-all route */}
             <Route path="*" element={<NotFound />} />
