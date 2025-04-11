@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/components/ui/use-toast';
 import { Substance } from '@/types';
-import { SubstanceForm } from './substances/SubstanceForm';
+import SubstanceForm from './substances/SubstanceForm';
 import { SubstanceFormValues } from './substances/SubstanceFormSchema';
 
 interface EditSubstanceFormProps {

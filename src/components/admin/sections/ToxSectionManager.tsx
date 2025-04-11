@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ToxSectionForm } from './ToxSectionForm';
+import ToxSectionForm from './ToxSectionForm';
 import { ToxSectionFormValues } from './ToxSectionFormSchema';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
