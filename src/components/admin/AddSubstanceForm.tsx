@@ -3,7 +3,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/components/ui/use-toast';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Beaker } from 'lucide-react';
+import { ToxSectionType } from '@/types';
 
 const substanceSchema = z.object({
   name: z.string().min(1, "Le nom est obligatoire"),
@@ -25,6 +26,7 @@ type SubstanceFormValues = z.infer<typeof substanceSchema>;
 
 const AddSubstanceForm: React.FC = () => {
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   
   const form = useForm<SubstanceFormValues>({
     resolver: zodResolver(substanceSchema),
@@ -40,6 +42,7 @@ const AddSubstanceForm: React.FC = () => {
   
   const addSubstanceMutation = useMutation({
     mutationFn: async (data: SubstanceFormValues) => {
+      // First, insert the substance
       const { error, data: newSubstance } = await supabase
         .from('substances')
         .insert([{
@@ -54,12 +57,37 @@ const AddSubstanceForm: React.FC = () => {
         .single();
       
       if (error) throw error;
+      
+      // Then create default section drafts for the substance
+      if (newSubstance?.id) {
+        const sections = Object.values(ToxSectionType).map(sectionType => ({
+          substance_id: newSubstance.id,
+          section_type: sectionType,
+          title: `${data.name} - ${sectionType}`,
+          content: '',
+          source_urls: [],
+          reference_list: [],
+          updated_at: new Date().toISOString(),
+          created_at: new Date().toISOString(),
+        }));
+        
+        const { error: sectionsError } = await supabase
+          .from('substance_section_drafts')
+          .insert(sections);
+          
+        if (sectionsError) {
+          console.error("Error creating section drafts:", sectionsError);
+          // Don't throw error here, just log it - we still created the substance successfully
+        }
+      }
+      
       return newSubstance;
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['substances'] });
       toast({
         title: "Substance ajoutée",
-        description: "La substance a été ajoutée avec succès",
+        description: "La substance et ses sections toxicologiques ont été ajoutées avec succès",
       });
       form.reset();
     },
