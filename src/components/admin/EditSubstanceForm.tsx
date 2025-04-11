@@ -1,11 +1,12 @@
 
 import React from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/components/ui/use-toast';
 import { Substance } from '@/types';
 import SubstanceForm from './substances/SubstanceForm';
 import { SubstanceFormValues } from './substances/SubstanceFormSchema';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface EditSubstanceFormProps {
   substance?: Substance;
@@ -14,6 +15,8 @@ interface EditSubstanceFormProps {
 
 const EditSubstanceForm: React.FC<EditSubstanceFormProps> = ({ substance, onSuccess }) => {
   const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
   const isEditMode = !!substance;
   
   const updateSubstanceMutation = useMutation({
@@ -26,6 +29,7 @@ const EditSubstanceForm: React.FC<EditSubstanceFormProps> = ({ substance, onSucc
         description: data.description || null,
         regulatory_status: data.regulatoryStatus || null,
         status: data.isDraft ? 'draft' : 'published',
+        updated_by: user?.id,
         updated_at: new Date().toISOString(),
       };
       
@@ -37,20 +41,30 @@ const EditSubstanceForm: React.FC<EditSubstanceFormProps> = ({ substance, onSucc
           .select()
           .single();
         
-        if (error) throw error;
+        if (error) {
+          console.error("Error updating substance:", error);
+          throw error;
+        }
         return updatedSubstance;
       } else {
         const { data: newSubstance, error } = await supabase
           .from('substances')
-          .insert([subData])
+          .insert([{
+            ...subData,
+            created_by: user?.id
+          }])
           .select()
           .single();
         
-        if (error) throw error;
+        if (error) {
+          console.error("Error creating substance:", error);
+          throw error;
+        }
         return newSubstance;
       }
     },
     onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['substances'] });
       toast({
         title: isEditMode ? "Substance mise à jour" : "Substance ajoutée",
         description: isEditMode 
@@ -62,12 +76,13 @@ const EditSubstanceForm: React.FC<EditSubstanceFormProps> = ({ substance, onSucc
         onSuccess(data as unknown as Substance);
       }
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast({
         title: "Erreur",
         description: `Échec de l'opération: ${error.message}`,
         variant: "destructive",
       });
+      console.error("Complete error details:", error);
     },
   });
   

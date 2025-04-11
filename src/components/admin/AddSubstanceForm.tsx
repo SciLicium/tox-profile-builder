@@ -6,10 +6,12 @@ import { useToast } from '@/components/ui/use-toast';
 import { ToxSectionType } from '@/types';
 import SubstanceForm from './substances/SubstanceForm';
 import { SubstanceFormValues } from './substances/SubstanceFormSchema';
+import { useAuth } from '@/contexts/AuthContext';
 
 const AddSubstanceForm: React.FC = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
   
   const addSubstanceMutation = useMutation({
     mutationFn: async (data: SubstanceFormValues) => {
@@ -24,21 +26,28 @@ const AddSubstanceForm: React.FC = () => {
           description: data.description,
           regulatory_status: data.regulatoryStatus,
           status: data.isDraft ? 'draft' : 'published',
+          created_by: user?.id, // Add the user ID who created the substance
+          updated_by: user?.id, // Add the user ID who last updated the substance
+          updated_at: new Date().toISOString(),
         }])
         .select()
         .single();
       
-      if (error) throw error;
+      if (error) {
+        console.error("Error creating substance:", error);
+        throw error;
+      }
       
       // Then create default section drafts for the substance
       if (newSubstance?.id) {
         const sections = Object.values(ToxSectionType).map(sectionType => ({
           substance_id: newSubstance.id,
           section_type: sectionType,
-          title: `${data.name} - ${sectionType}`,
+          title: `${data.name} - ${sectionType.replace(/_/g, ' ').toLowerCase()}`,
           content: '',
           source_urls: [], 
           reference_list: [],
+          created_by: user?.id, // Add the user ID who created the section
           updated_at: new Date().toISOString(),
           created_at: new Date().toISOString(),
         }));
@@ -61,12 +70,13 @@ const AddSubstanceForm: React.FC = () => {
         description: "La substance et ses sections toxicologiques ont été ajoutées avec succès",
       });
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast({
         title: "Erreur",
         description: `Échec de l'ajout de la substance: ${error.message}`,
         variant: "destructive",
       });
+      console.error("Complete error details:", error);
     },
   });
   

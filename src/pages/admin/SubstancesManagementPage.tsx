@@ -7,7 +7,6 @@ import { supabase } from '@/integrations/supabase/client';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AddSubstanceForm from '@/components/admin/AddSubstanceForm';
 import SubstancesList from '@/components/admin/SubstancesList';
-import EditSubstanceForm from '@/components/admin/EditSubstanceForm';
 import { Button } from '@/components/ui/button';
 import { Beaker, Plus } from 'lucide-react';
 
@@ -41,7 +40,7 @@ const SubstancesManagementPage: React.FC = () => {
           
           <div className="grid gap-8">
             {showAddForm ? (
-              <EditSubstanceForm onSuccess={() => setShowAddForm(false)} />
+              <AddSubstanceForm />
             ) : (
               <SubstancesList />
             )}
