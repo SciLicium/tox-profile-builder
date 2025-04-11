@@ -36,7 +36,7 @@ const AddSubstanceForm: React.FC = () => {
           updated_by: user.id,
           updated_at: new Date().toISOString(),
         }])
-        .select()
+        .select('*')
         .single();
       
       if (error) {

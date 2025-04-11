@@ -41,7 +41,7 @@ const EditSubstanceForm: React.FC<EditSubstanceFormProps> = ({ substance, onSucc
             updated_at: new Date().toISOString(),
           })
           .eq('id', substance.id)
-          .select()
+          .select('*')
           .single();
         
         if (error) {
@@ -65,7 +65,7 @@ const EditSubstanceForm: React.FC<EditSubstanceFormProps> = ({ substance, onSucc
             updated_by: user.id,
             updated_at: new Date().toISOString(),
           }])
-          .select()
+          .select('*')
           .single();
         
         if (error) {
