@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -65,8 +64,8 @@ const AddSubstanceForm: React.FC = () => {
           section_type: sectionType,
           title: `${data.name} - ${sectionType}`,
           content: '',
-          source_urls: [],
-          reference_list: [],
+          source_urls: [], // Ensure we're using empty arrays, not strings
+          reference_list: [], // Ensure we're using empty arrays, not strings
           updated_at: new Date().toISOString(),
           created_at: new Date().toISOString(),
         }));
