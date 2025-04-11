@@ -32,27 +32,18 @@ const SectionDraftForm: React.FC<SectionDraftFormProps> = ({
   isSubmitting,
   isEdit
 }) => {
-  // Fix the defaultValues to match the expected types from the schema
   const form = useForm<SectionDraftFormValues>({
     resolver: zodResolver(sectionDraftSchema),
-    defaultValues: initialData ? {
-      title: initialData.title,
-      content: initialData.content || '',
-      sectionType: initialData.sectionType as ToxSectionType,
-      // Convert array to string for form display, the schema will handle conversion back
-      sourceUrls: Array.isArray(initialData.sourceUrls) 
+    defaultValues: {
+      title: initialData?.title || '',
+      content: initialData?.content || '',
+      sectionType: initialData?.sectionType as ToxSectionType || ToxSectionType.ACUTE_TOXICITY,
+      sourceUrls: Array.isArray(initialData?.sourceUrls) 
         ? initialData.sourceUrls.join('\n') 
         : '',
-      referenceList: Array.isArray(initialData.referenceList) 
+      referenceList: Array.isArray(initialData?.referenceList) 
         ? initialData.referenceList.join('\n') 
         : '',
-    } : {
-      title: '',
-      content: '',
-      sectionType: ToxSectionType.ACUTE_TOXICITY,
-      // Use empty strings that will be transformed by the schema
-      sourceUrls: '',
-      referenceList: '',
     },
   });
 
