@@ -11,14 +11,10 @@ export const sectionDraftSchema = z.object({
   sectionType: z.nativeEnum(ToxSectionType),
   title: z.string().min(1, "Le titre est obligatoire"),
   content: z.string().optional(),
-  sourceUrls: z.union([
-    z.string().transform(stringToArray),
-    z.array(z.string())
-  ]),
-  referenceList: z.union([
-    z.string().transform(stringToArray),
-    z.array(z.string())
-  ])
+  sourceUrls: z.string()
+    .transform(stringToArray),
+  referenceList: z.string()
+    .transform(stringToArray)
 });
 
 // Create type from schema

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,18 +15,20 @@ interface SectionDraftFormProps {
   onSubmit: (data: SectionDraftFormValues) => void;
   isSubmitting: boolean;
   isEdit?: boolean;
+  onCancel?: () => void;
 }
 
 const SectionDraftForm: React.FC<SectionDraftFormProps> = ({
   initialData,
   onSubmit,
   isSubmitting,
-  isEdit = false
+  isEdit = false,
+  onCancel
 }) => {
   const form = useForm<SectionDraftFormValues>({
     resolver: zodResolver(sectionDraftSchema),
     defaultValues: {
-      sectionType: initialData?.sectionType || ToxSectionType.ACUTE_TOXICITY,
+      sectionType: initialData?.sectionType as ToxSectionType || ToxSectionType.ACUTE_TOXICITY,
       title: initialData?.title || '',
       content: initialData?.content || '',
       sourceUrls: initialData?.sourceUrls ? initialData.sourceUrls.join('\n') : '',
@@ -124,6 +127,11 @@ const SectionDraftForm: React.FC<SectionDraftFormProps> = ({
         />
         
         <div className="flex justify-end gap-2">
+          {onCancel && (
+            <Button type="button" variant="outline" onClick={onCancel}>
+              Annuler
+            </Button>
+          )}
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting
               ? "Enregistrement..."

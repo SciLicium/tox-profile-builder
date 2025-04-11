@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,11 +28,11 @@ const ToxSectionForm: React.FC<ToxSectionFormProps> = ({
   const form = useForm<ToxSectionFormValues>({
     resolver: zodResolver(toxSectionSchema),
     defaultValues: {
-      sectionType: initialData?.sectionType || ToxSectionType.ACUTE_TOXICITY,
+      sectionType: initialData?.sectionType as ToxSectionType || ToxSectionType.ACUTE_TOXICITY,
       title: initialData?.title || '',
       content: initialData?.content || '',
       sourceUrls: initialData?.sourceUrls ? initialData.sourceUrls.join('\n') : '',
-      referenceList: initialData?.referenceList ? initialData.referenceList.join('\n') : '',
+      referenceList: initialData?.references ? initialData.references.join('\n') : '',
       status: initialData?.status || 'pending',
     },
   });

@@ -12,11 +12,9 @@ export const toxSectionSchema = z.object({
   title: z.string().min(1, "Le titre est obligatoire"),
   content: z.string().optional(),
   sourceUrls: z.string()
-    .transform(stringToArray)
-    .or(z.array(z.string())),
+    .transform(stringToArray),
   referenceList: z.string()
-    .transform(stringToArray)
-    .or(z.array(z.string())),
+    .transform(stringToArray),
   status: z.enum(['valid', 'incomplete', 'verify', 'pending']),
 });
 
