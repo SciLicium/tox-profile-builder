@@ -11,12 +11,12 @@ import { useAuth } from '@/contexts/AuthContext';
 const AddSubstanceForm: React.FC = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   
   const addSubstanceMutation = useMutation({
     mutationFn: async (data: SubstanceFormValues) => {
-      if (!user?.id) {
-        throw new Error('User not authenticated');
+      if (!user?.id || !profile) {
+        throw new Error('User not authenticated or profile not loaded');
       }
       
       console.log("Creating substance with user ID:", user.id);

@@ -16,13 +16,13 @@ interface EditSubstanceFormProps {
 const EditSubstanceForm: React.FC<EditSubstanceFormProps> = ({ substance, onSuccess }) => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const isEditMode = !!substance;
   
   const updateSubstanceMutation = useMutation({
     mutationFn: async (data: SubstanceFormValues) => {
-      if (!user?.id) {
-        throw new Error('User not authenticated');
+      if (!user?.id || !profile) {
+        throw new Error('User not authenticated or profile not loaded');
       }
       
       if (isEditMode && substance) {
