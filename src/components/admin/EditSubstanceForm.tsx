@@ -53,7 +53,7 @@ const EditSubstanceForm: React.FC<EditSubstanceFormProps> = ({ substance, onSucc
         console.log("Creating new substance with user ID:", user.id);
         const { data: newSubstance, error } = await supabase
           .from('substances')
-          .insert({
+          .insert([{
             name: data.name,
             inci_name: data.inciName || null,
             cas_number: data.casNumber || null,
@@ -64,7 +64,7 @@ const EditSubstanceForm: React.FC<EditSubstanceFormProps> = ({ substance, onSucc
             created_by: user.id,
             updated_by: user.id,
             updated_at: new Date().toISOString(),
-          })
+          }])
           .select()
           .single();
         

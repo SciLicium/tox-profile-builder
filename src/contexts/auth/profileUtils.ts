@@ -7,7 +7,7 @@ export const fetchProfileById = async (userId: string): Promise<UserProfile | nu
     console.log("Fetching profile for user:", userId);
     const { data, error } = await supabase
       .from('profiles')
-      .select('*')
+      .select('id, first_name, last_name, role')
       .eq('id', userId)
       .maybeSingle();
 
@@ -22,7 +22,12 @@ export const fetchProfileById = async (userId: string): Promise<UserProfile | nu
     }
     
     console.log("Profile data received:", data);
-    return data as UserProfile;
+    return {
+      id: data.id,
+      first_name: data.first_name,
+      last_name: data.last_name,
+      role: data.role
+    } as UserProfile;
   } catch (error) {
     console.error('Error fetching user profile:', error);
     return null;

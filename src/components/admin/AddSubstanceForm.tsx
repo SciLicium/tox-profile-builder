@@ -24,7 +24,7 @@ const AddSubstanceForm: React.FC = () => {
       // First, insert the substance
       const { error, data: newSubstance } = await supabase
         .from('substances')
-        .insert({
+        .insert([{
           name: data.name,
           inci_name: data.inciName || null,
           cas_number: data.casNumber || null,
@@ -35,7 +35,7 @@ const AddSubstanceForm: React.FC = () => {
           created_by: user.id,
           updated_by: user.id,
           updated_at: new Date().toISOString(),
-        })
+        }])
         .select()
         .single();
       

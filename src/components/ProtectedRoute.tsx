@@ -19,14 +19,18 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   useEffect(() => {
     if (!loading && user) {
-      console.log("Protected route accessed by user with role:", profile?.role);
+      if (profile) {
+        console.log("Protected route accessed by user with role:", profile.role);
       
-      if (requiredRole && profile?.role !== requiredRole && profile?.role !== 'admin') {
-        toast({
-          title: "Accès refusé",
-          description: "Vous n'avez pas les permissions nécessaires pour accéder à cette page",
-          variant: "destructive",
-        });
+        if (requiredRole && profile.role !== requiredRole && profile.role !== 'admin') {
+          toast({
+            title: "Accès refusé",
+            description: "Vous n'avez pas les permissions nécessaires pour accéder à cette page",
+            variant: "destructive",
+          });
+        }
+      } else {
+        console.log("User authenticated but no profile loaded");
       }
     }
   }, [user, profile, requiredRole, loading, toast]);
@@ -43,7 +47,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to="/auth/login" state={{ from: location }} replace />;
   }
 
-  if (requiredRole && profile?.role !== requiredRole && profile?.role !== 'admin') {
+  if (requiredRole && profile && profile.role !== requiredRole && profile.role !== 'admin') {
     return <Navigate to="/" replace />;
   }
 
