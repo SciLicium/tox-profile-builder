@@ -18,8 +18,8 @@ export const useSectionMutations = (substanceId?: string) => {
         section_type: formData.sectionType,
         title: formData.title,
         content: formData.content || null,
-        source_urls: formData.sourceUrls, // Now array from transform
-        reference_list: formData.referenceList, // Now array from transform
+        source_urls: formData.sourceUrls, // Already transformed to array by Zod
+        reference_list: formData.referenceList, // Already transformed to array by Zod
         updated_at: new Date().toISOString(),
       };
       
