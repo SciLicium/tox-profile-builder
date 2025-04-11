@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { useToast } from '@/components/ui/use-toast';
 import ProtectedRoute from '@/components/ProtectedRoute';
@@ -13,6 +13,12 @@ const SubstancesManagementPage: React.FC = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const { user, profile } = useAuth();
   const { toast } = useToast();
+  
+  // Debug auth state
+  useEffect(() => {
+    console.log("Current user:", user?.id);
+    console.log("User profile:", profile);
+  }, [user, profile]);
   
   const toggleForm = () => {
     if (!user) {

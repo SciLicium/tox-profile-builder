@@ -17,8 +17,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const navigate = useNavigate();
 
   const fetchProfile = async (userId: string) => {
-    const profileData = await fetchProfileById(userId);
-    setProfile(profileData);
+    try {
+      const profileData = await fetchProfileById(userId);
+      console.log("Fetched profile:", profileData);
+      setProfile(profileData);
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+      setProfile(null);
+    }
   };
 
   const { signIn, signUp, signOut, resetPassword, updateProfile } = useAuthFunctions(
@@ -32,7 +38,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, newSession) => {
+      async (event, newSession) => {
+        console.log("Auth state changed:", event);
         setSession(newSession);
         setUser(newSession?.user ?? null);
         

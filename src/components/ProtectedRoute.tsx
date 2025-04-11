@@ -18,12 +18,16 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   const { toast } = useToast();
 
   useEffect(() => {
-    if (!loading && user && requiredRole && profile?.role !== requiredRole && profile?.role !== 'admin') {
-      toast({
-        title: "Accès refusé",
-        description: "Vous n'avez pas les permissions nécessaires pour accéder à cette page",
-        variant: "destructive",
-      });
+    if (!loading && user) {
+      console.log("Protected route accessed by user with role:", profile?.role);
+      
+      if (requiredRole && profile?.role !== requiredRole && profile?.role !== 'admin') {
+        toast({
+          title: "Accès refusé",
+          description: "Vous n'avez pas les permissions nécessaires pour accéder à cette page",
+          variant: "destructive",
+        });
+      }
     }
   }, [user, profile, requiredRole, loading, toast]);
 

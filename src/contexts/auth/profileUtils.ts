@@ -9,11 +9,16 @@ export const fetchProfileById = async (userId: string): Promise<UserProfile | nu
       .from('profiles')
       .select('*')
       .eq('id', userId)
-      .single();
+      .maybeSingle();
 
     if (error) {
       console.error('Error fetching user profile:', error);
       throw error;
+    }
+    
+    if (!data) {
+      console.log("No profile found for user:", userId);
+      return null;
     }
     
     console.log("Profile data received:", data);
